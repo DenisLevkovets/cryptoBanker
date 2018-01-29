@@ -15,14 +15,15 @@ def start(msg):
 
 
 def lang():
-    markup=telebot.types.ReplyKeyboardMarkup(True,True)
-    bt_eng=telebot.types.InlineKeyboardButton(text="English" ,callback_data="langeng")
-    bt_rus=telebot.types.InlineKeyboardButton(text="Русский", callback_data="langrus")
-    bt_ukr=telebot.types.InlineKeyboardButton(text="Украiнський", callback_data="langukr")
+    markup = telebot.types.InlineKeyboardMarkup()
+    bt_eng = telebot.types.InlineKeyboardButton(text="English", callback_data="langeng")
+    bt_rus = telebot.types.InlineKeyboardButton(text="Русский", callback_data="langrus")
+    bt_ukr = telebot.types.InlineKeyboardButton(text="Украiнський", callback_data="langukr")
     markup.add(bt_eng)
     markup.add(bt_rus)
     markup.add(bt_ukr)
     return markup
+
 
 @bot.callback_query_handler(func=lambda call: call.data[:4] == "lang")
 def language(call):

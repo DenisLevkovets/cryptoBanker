@@ -3,13 +3,13 @@ import sys
 import pymysql
 
 
-DB_HOST = "localhost"
-DB_USER = "root"
+DB_HOST = "92.53.67.130"
+DB_USER = "remote"
 DB_PASSWORD = "conass"
-DB_NAME = "eth"
+DB_NAME = "crypt"
 
 
-if sys.platform == 'win32':
+if sys.platform == 'win32' and False:
     #print('lll')
     paramstyle = '?'
 else:
@@ -17,7 +17,7 @@ else:
 
 
 def connect():
-    if sys.platform == 'win32':
+    if sys.platform == 'win32' and False:
         return sqlite3.connect("db.sqlite")
     return pymysql.connect(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME, use_unicode=True, charset="utf8")
 
