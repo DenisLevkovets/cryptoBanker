@@ -23,6 +23,11 @@ def welcome():
 def addWelcome():
     markup=telebot.types.ReplyKeyboardMarkup(False,False)
     bt_settings=telebot.types.InlineKeyboardButton(text="Настройки",callback_data="settings")
+    bt_service=telebot.types.InlineKeyboardButton(text="О сервисе",callback_data="service")
+    bt_wallet=telebot.types.InlineKeyboardButton(text="Кошелёк",callback_data="wallet")
+    bt_exchange=telebot.types.InlineKeyboardButton(text="Обменные операции",callback_data="exchange")
+    markup.add(bt_wallet,bt_service)
     markup.add(bt_settings)
+    markup.add(bt_exchange)
     return markup
 

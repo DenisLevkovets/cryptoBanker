@@ -10,7 +10,7 @@ DB_NAME = "eth"
 
 
 if sys.platform == 'win32':
-    print('lll')
+    #print('lll')
     paramstyle = '?'
 else:
     paramstyle = "%s"
