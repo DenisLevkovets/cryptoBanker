@@ -1,4 +1,5 @@
 import telebot
+import base
 
 def language():
     markup=telebot.types.ReplyKeyboardMarkup(True,True)
@@ -29,5 +30,13 @@ def addWelcome():
     markup.add(bt_wallet,bt_service)
     markup.add(bt_settings)
     markup.add(bt_exchange)
+    return markup
+
+
+def add_request(cid):
+    markup = telebot.types.InlineKeyboardMarkup()
+    text = base.get_text(cid, 'add_req')
+    btn = telebot.types.InlineKeyboardButton(text=text, callback_data='add request')
+    markup.row(btn)
     return markup
 
