@@ -1,4 +1,5 @@
 import telebot
+import base
 
 
 def language():
@@ -45,6 +46,7 @@ def currency():
     markup.add(bt_monero, bt_ripple, bt_eos, bt_btc)
     markup.add(bt_back)
     return markup
+
 
 
 def menu():
@@ -161,3 +163,12 @@ def settings():
     markup.add(bt_address,bt_cur)
     markup.add(bt_auto,bt_save)
     return markup
+
+def add_request(cid):
+    markup = telebot.types.InlineKeyboardMarkup()
+    text = base.get_text(cid, 'add_req')
+    btn = telebot.types.InlineKeyboardButton(text=text, callback_data='add request')
+    markup.row(btn)
+    return markup
+
+

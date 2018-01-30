@@ -7,13 +7,17 @@ from starter import start_bot, bot
 @bot.message_handler(commands=['start'])
 def start(msg):
     chat = msg.chat
-    str = bot.send_message(chat.id, "Привет, Мир! Выбери язык", reply_markup=markups.language())
+
+
+    text = base.get_text('rus', 'welcome')
     welcome(msg)
-    # bot.register_next_step_handler(str,language)
+    bot.send_message(chat.id, text, reply_markup=markups.language())
+
     # name = chat.first_name
     # if msg.from_user.last_name is not None:
     #     name += chat.last_name
-    # base.create_user(chat.id, name, chat.username)
+    base.create_user(chat.id)
+
 
 
 # def language(msg):
@@ -42,6 +46,42 @@ def currency(call):
     chat = call.message.chat
     bot.send_message(chat.id, "Операции покупки или продажи", reply_markup=markups.addWelcome())
     bot.send_message(chat.id, "Здесь совершается операции с людьми", reply_markup=markups.menu())
+
+def lang():
+    markup = telebot.types.InlineKeyboardMarkup()
+    bt_eng = telebot.types.InlineKeyboardButton(text="English", callback_data="langeng")
+    bt_rus = telebot.types.InlineKeyboardButton(text="Русский", callback_data="langrus")
+    bt_ukr = telebot.types.InlineKeyboardButton(text="Украiнський", callback_data="langukr")
+    markup.add(bt_eng)
+    markup.add(bt_rus)
+    markup.add(bt_ukr)
+    return markup
+
+
+@bot.callback_query_handler(func=lambda call: call.data[:4] == "lang")
+def language(call):
+
+    print("1")
+    chat = call.message.chat
+    bot.send_message(chat.id, "Вы выбрали язык")
+    base.create_user(chat.id, call.data[4:])
+    # bot.register_next_step_handler("Вы выбрали язык",confirm)
+
+
+@bot.callback_query_handler(func=lambda call: call.data == 'requests')
+def my_requests(call):
+    text = base.get_text(call.message.chat.id, 'no_req')
+    bot.edit_message_text(text, call.message.chat.id, call.message.message_id)
+    bot.edit_message_reply_markup(call.message.chat.id, call.message.message_id,
+                                  reply_markup=markups.add_request(call.message.chat.id))
+
+
+def confirm(msg):
+    markup = telebot.types.ReplyKeyboardMarkup(False, True)
+    markup.row("ok")
+    bot.send_message(msg.chat.id, "Подтвердить условия", reply_markup=markup)
+    bot.register_next_step_handler("ok", welcome)
+
 
 
 @bot.callback_query_handler(func=lambda call: call.data == 'backtomenu')
@@ -160,4 +200,5 @@ def lang(call):
 
 
 if __name__ == "__main__":
-    start_bot()
+    bot.polling()
+    # start_bot()
