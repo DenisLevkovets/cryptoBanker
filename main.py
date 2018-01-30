@@ -159,5 +159,8 @@ def lang(call):
     bot.send_message(chat.id, "Выберите язык", reply_markup=markups.language())
 
 
+
+
+
 if __name__ == "__main__":
     start_bot()
