@@ -28,6 +28,7 @@ def lang():
 
 @bot.callback_query_handler(func=lambda call: call.data[:4] == "lang")
 def language(call):
+
     print("1")
     chat = call.message.chat
     bot.send_message(chat.id, "Вы выбрали язык")
