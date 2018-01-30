@@ -5,33 +5,29 @@ from starter import start_bot, bot
 
 
 @bot.message_handler(commands=['start'])
-def start(msg):
+def start(message):
+    chat = message.chat
+    text = 'Привет, мир!'
+    # welcome(msg)
+    msg = bot.send_message(chat.id, text, reply_markup=markups.language())
+    bot.register_next_step_handler(msg, language)
+    # base.create_user(chat.id)
+
+
+def language(msg):
     chat = msg.chat
-
-
-    text = base.get_text('rus', 'welcome')
-    welcome(msg)
-    bot.send_message(chat.id, text, reply_markup=markups.language())
-
-    # name = chat.first_name
-    # if msg.from_user.last_name is not None:
-    #     name += chat.last_name
-    base.create_user(chat.id)
-
-
-
-# def language(msg):
-#     chat = msg.chat
-#     bot.send_message(chat.id, "Вы выбрали язык")k
-#     markup = telebot.types.ReplyKeyboardMarkup(True, True)
-#     markup.row("ok")
-#     str=bot.send_message(msg.chat.id, "Подтвердить условия", reply_markup=markup)
-#     bot.register_next_step_handler(str, welcome)
+    bot.send_message(chat.id, "Вы выбрали язык")
+    base.create_user(msg.chat.id, msg.text)
+    markup = telebot.types.ReplyKeyboardMarkup(True, True)
+    markup.row("ok")
+    str=bot.send_message(msg.chat.id, "Подтвердить условия", reply_markup=markup)
+    bot.register_next_step_handler(str, welcome)
 
 
 def welcome(msg):
+    bot.send_message(msg.chat.id, base.get_text(msg.chat.id, 'welcome_inf') % msg.from_user.first_name,
+                     reply_markup=markups.welcome(), parse_mode='html')
     bot.send_message(msg.chat.id, "Чат-поддержка", reply_markup=markups.addWelcome())
-    bot.send_message(msg.chat.id, "Приветик", reply_markup=markups.welcome())
 
 
 @bot.callback_query_handler(func=lambda call: call.data == 'currency')
@@ -58,14 +54,13 @@ def lang():
     return markup
 
 
-@bot.callback_query_handler(func=lambda call: call.data[:4] == "lang")
-def language(call):
-
-    print("1")
-    chat = call.message.chat
-    bot.send_message(chat.id, "Вы выбрали язык")
-    base.create_user(chat.id, call.data[4:])
-    # bot.register_next_step_handler("Вы выбрали язык",confirm)
+# @bot.callback_query_handler(func=lambda call: call.data[:4] == "lang")
+# def language(call):
+#     print("1")
+#     chat = call.message.chat
+#     bot.send_message(chat.id, "Вы выбрали язык")
+#     base.create_user(chat.id, call.data[4:])
+#     # bot.register_next_step_handler("Вы выбрали язык",confirm)
 
 
 @bot.callback_query_handler(func=lambda call: call.data == 'requests')

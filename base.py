@@ -25,6 +25,8 @@ def connect():
 def execute(sql, *args, commit=False):
     db = connect()
     cur = db.cursor()
+    print(args)
+    print(sql % {"p": paramstyle})
     cur.execute(sql % {"p": paramstyle}, args)
     if commit:
         db.commit()
@@ -37,16 +39,13 @@ def execute(sql, *args, commit=False):
 
 def get_text(uid, t_type):
     lang = execute('SELECT lang FROM users WHERE uid = %(p)s', uid)
-    db = connect()
-    cur = db.cursor()
-    cur.execute(f'SELECT {t_type} FROM texts WHERE lang = %s', lang)
-    text = cur.fetchone()
-    db.close()
-    return text
+    text = execute('SELECT {} FROM texts WHERE lang = %(p)s'.format(t_type), lang)
+
+    return text[0][0]
 
 
 def create_user(cid, lang):
-    if execute("SELECT * FROM users WHERE cid=%(p)s", cid):
+    if execute("SELECT * FROM users WHERE uid=%(p)s", cid):
         return 0
     execute('INSERT INTO users (uid, lang) VALUES (%(p)s, %(p)s)', cid, lang, commit=True)
     # if username is None:
