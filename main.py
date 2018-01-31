@@ -138,7 +138,7 @@ def bbring(call):
 @bot.callback_query_handler(func=lambda call: call.data == 'withdraw')
 def withdraw(call):
     msg=call.message
-    bot.edit_message_text("С какой валюты списать бобосы",msg.chat.id,msg.message_id,reply_markup=markups.withdraw())
+    bot.edit_message_text("С какой валюты списать бобосы",msg.chat.id,msg.message_id,reply_markup=markups.withdra())
 
 
 @bot.callback_query_handler(func=lambda call: call.data[:5] == 'wwith')

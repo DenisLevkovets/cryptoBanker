@@ -122,7 +122,7 @@ def bringin():
     return markup
 
 
-def withdraw():
+def withdra():
     markup = telebot.types.InlineKeyboardMarkup()
     bt_monero = telebot.types.InlineKeyboardButton(text="Monero", callback_data="wwithMonero")
     bt_eos = telebot.types.InlineKeyboardButton(text="EOS", callback_data="wwithEOS")
