@@ -1,4 +1,5 @@
 import telebot
+import base
 
 
 def language():
@@ -121,6 +122,16 @@ def bringin():
     return markup
 
 
+def withdraw():
+    markup = telebot.types.InlineKeyboardMarkup()
+    bt_monero = telebot.types.InlineKeyboardButton(text="Monero", callback_data="wwithMonero")
+    bt_eos = telebot.types.InlineKeyboardButton(text="EOS", callback_data="wwithEOS")
+    bt_ripple = telebot.types.InlineKeyboardButton(text="Ripple", callback_data="wwithRipple")
+    bt_btc = telebot.types.InlineKeyboardButton(text="BTC", callback_data="wwithBitcoin")
+    markup.add(bt_monero, bt_eos)
+    markup.add(bt_ripple, bt_btc)
+    return markup
+
 def request_curr():
     markup = telebot.types.InlineKeyboardMarkup()
     bt_monero = telebot.types.InlineKeyboardButton(text="Monero", callback_data="rreqMonero")
@@ -151,13 +162,41 @@ def pay_method():
 
 def settings():
     markup = telebot.types.InlineKeyboardMarkup()
-    bt_lan = telebot.types.InlineKeyboardButton(text="Язык", callback_data="language")
+    bt_lan = telebot.types.InlineKeyboardButton(text="Язык", callback_data="chooselanguage")
     bt_rate = telebot.types.InlineKeyboardButton(text="Биржевые курсы", callback_data="rate")
     bt_address = telebot.types.InlineKeyboardButton(text="Адрес", callback_data="address")
     bt_cur = telebot.types.InlineKeyboardButton(text="Выбрать валюту", callback_data="currency")
     bt_auto = telebot.types.InlineKeyboardButton(text="Автопилот", callback_data="auto")
     bt_save = telebot.types.InlineKeyboardButton(text="Безопасный режим", callback_data="savemode")
-    markup.add(bt_lan,bt_rate)
-    markup.add(bt_address,bt_cur)
-    markup.add(bt_auto,bt_save)
+    markup.add(bt_lan, bt_rate)
+    markup.add(bt_address, bt_cur)
+    markup.add(bt_auto, bt_save)
+    return markup
+
+
+def add_request(cid):
+    markup = telebot.types.InlineKeyboardMarkup()
+    text = base.get_text(cid, 'add_req')
+    btn = telebot.types.InlineKeyboardButton(text=text, callback_data='add request')
+    markup.row(btn)
+    return markup
+
+
+def rate():
+    markup = telebot.types.InlineKeyboardMarkup()
+    bt_burse1 = telebot.types.InlineKeyboardButton(text="Название биржи 1 ...", callback_data="burse1")
+    bt_back_to_settings = telebot.types.InlineKeyboardButton(text="Назад к настройкам", callback_data="settings")
+    markup.add(bt_burse1)
+    markup.add(bt_back_to_settings)
+    return markup
+
+
+def address():
+    markup = telebot.types.InlineKeyboardMarkup()
+    bt_monero = telebot.types.InlineKeyboardButton(text="Monero", callback_data="adrsMonero")
+    bt_eos = telebot.types.InlineKeyboardButton(text="EOS", callback_data="adrsEOS")
+    bt_ripple = telebot.types.InlineKeyboardButton(text="Ripple", callback_data="adrsRipple")
+    bt_btc = telebot.types.InlineKeyboardButton(text="BTC", callback_data="adrsBitcoin")
+    markup.add(bt_monero, bt_eos)
+    markup.add(bt_ripple, bt_btc)
     return markup

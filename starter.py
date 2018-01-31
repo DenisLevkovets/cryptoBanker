@@ -18,7 +18,7 @@ WEBHOOK_URL_BASE = "https://{}:{}".format(WEBHOOK_HOST, WEBHOOK_PORT)
 WEBHOOK_URL_PATH = "/{}/".format(config.token)
 
 
-bot = telebot.TeleBot(config.token)
+bot = telebot.TeleBot(config.testing_token)
 
 app = web.Application()
 
