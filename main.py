@@ -7,16 +7,14 @@ from starter import start_bot, bot
 @bot.message_handler(commands=['start'])
 def start(message):
     chat = message.chat
-    text = 'Привет, мир!'
     # welcome(msg)
-    msg = bot.send_message(chat.id, text, reply_markup=markups.language())
+    msg = bot.send_message(chat.id, "Select a language in the list", reply_markup=markups.language())
     bot.register_next_step_handler(msg, llanguage)
     # base.create_user(chat.id)
 
 
 def llanguage(msg):
     chat = msg.chat
-    bot.send_message(chat.id, "Вы выбрали язык")
     base.create_user(msg.chat.id, msg.text)
     markup = telebot.types.ReplyKeyboardMarkup(True, True)
     markup.row("ok")
@@ -33,20 +31,20 @@ def welcome(msg):
 @bot.callback_query_handler(func=lambda call: call.data == 'currency')
 def select_currency(call):
     chat = call.message.chat
-    bot.edit_message_text("Валюта", chat.id, call.message.message_id, reply_markup=markups.currency())
+    bot.edit_message_text(base.get_text(chat.id,'currency'), chat.id, call.message.message_id, reply_markup=markups.currency())
 
 
 @bot.message_handler(regexp="Выбор валюты")
 def select_currency(msg):
     chat = msg.chat
-    bot.send_message(chat.id, "Валюта", reply_markup=markups.currency())
+    bot.send_message(chat.id, base.get_text(chat.id,'currency'), reply_markup=markups.currency())
 
 
 @bot.callback_query_handler(func=lambda call: call.data[:4] == 'ccur')
 def currency(call):
     current_currency = call.data[4:]  # Выбранная валюта
     chat = call.message.chat
-    bot.edit_message_text("Операции покупки или продажи\nЗдесь совершается операции с людьми", chat.id,
+    bot.edit_message_text(base.get_text(chat.id,'operations'), chat.id,
                           call.message.message_id, reply_markup=markups.menu())
 
 
@@ -65,7 +63,7 @@ def langg():
 def lan(call):
     chat = call.message.chat
     new_lan = call.data[4:]
-    bot.edit_message_text( "Вы выбрали язык",chat.id,call.message.message_id)
+    bot.edit_message_text( "Вы выбрали язык",chat.id,call.message.message_id,reply_markup=markups.settings())
 
 
 @bot.callback_query_handler(func=lambda call: call.data == 'requests')
@@ -80,27 +78,27 @@ def my_requests(call):
 @bot.callback_query_handler(func=lambda call: call.data == 'backtomenu')
 def currency(call):
     chat = call.message.chat
-    bot.edit_message_text("Операции покупки или продажи\nЗдесь совершается операции с людьми", chat.id,
+    bot.edit_message_text(base.get_text(chat.id,'operations'), chat.id,
                           call.message.message_id, reply_markup=markups.menu())
 
 
 @bot.message_handler(regexp="Назад")
 def back(msg):
     bot.send_message(msg.chat.id, "Операции покупки или продажи", reply_markup=markups.addWelcome())
-    bot.send_message(msg.chat.id, "Здесь совершается операции с людьми", reply_markup=markups.menu())
+    bot.send_message(msg.chat.id, base.get_text(msg.chat.id,"operations"), reply_markup=markups.menu())
 
 
 @bot.message_handler(regexp="Обменные операции")
 def exchange(msg):
     bot.send_message(msg.chat.id, "Купить/Продать", reply_markup=markups.exchangeR())
-    bot.send_message(msg.chat.id, "Здесь вы совершаете сделки с людьми", reply_markup=markups.exchangeI())
+    bot.send_message(msg.chat.id, base.get_text(msg.chat.id,"exchamge"), reply_markup=markups.exchangeI())
 
 
 @bot.callback_query_handler(func=lambda call: call.data == 'buy')
 def buy(call):
     chat = call.message.chat
     bot.send_message(chat.id, "Покупка", reply_markup=markups.exchangeR())
-    bot.send_message(chat.id, "Выберите валюту", reply_markup=markups.buyI_sellI())
+    bot.send_message(chat.id, base.get_text(chat.id,'buycur'), reply_markup=markups.buyI_sellI())
 
 
 @bot.callback_query_handler(func=lambda call: call.data == 'monero')
@@ -113,13 +111,13 @@ def monero(call):
 def sell(call):
     chat = call.message.chat
     bot.send_message(chat.id, "Продажа", reply_markup=markups.exchangeR())
-    bot.send_message(chat.id, "Выберите валюту", reply_markup=markups.buyI_sellI())
+    bot.send_message(chat.id, base.get_text(chat.id,'sellcur'), reply_markup=markups.buyI_sellI())
 
 
 @bot.message_handler(regexp="Кошелёк")
 def wallet(msg):
     bot.send_message(msg.chat.id, "Кошелёк", reply_markup=markups.exchangeR())
-    bot.send_message(msg.chat.id, "Описание кошелька", reply_markup=markups.wallet())
+    bot.send_message(msg.chat.id, base.get_text(msg.chat.id,'wallet'), reply_markup=markups.wallet())
 
 
 @bot.callback_query_handler(func=lambda call: call.data == 'bringin')
@@ -205,13 +203,13 @@ def rate(msg):
 
 @bot.message_handler(regexp="Настройки")
 def settings(msg):
-    bot.send_message(msg.chat.id, "Настройки", reply_markup=markups.settings())
+    bot.send_message(msg.chat.id, base.get_text(msg.chat.id,'settings'), reply_markup=markups.settings())
 
 
 @bot.callback_query_handler(func=lambda call: call.data == 'settings')
 def setings(call):
     msg = call.message
-    bot.edit_message_text("Настройки", msg.chat.id, msg.message_id, reply_markup=markups.settings())
+    bot.edit_message_text(base.get_text(msg.chat.id,'settings'), msg.chat.id, msg.message_id, reply_markup=markups.settings())
 
 
 @bot.callback_query_handler(func=lambda call: call.data == "chooselanguage")
@@ -254,6 +252,11 @@ def address(call):
 def enter_address(msg):
     new_address = msg
     bot.send_message(msg.chat.id, "Информация сохранена")
+
+
+@bot.message_handler(regexp="О сервисе")
+def service(msg):
+    bot.send_message(msg.chat.id,"Нужно придумать")
 
 
 if __name__ == "__main__":
