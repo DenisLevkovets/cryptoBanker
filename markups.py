@@ -48,6 +48,7 @@ def currency():
     return markup
 
 
+
 def menu():
     markup = telebot.types.InlineKeyboardMarkup()
     bt_currency = telebot.types.InlineKeyboardButton(text="Выбрать валюту", callback_data="currency")
@@ -200,3 +201,12 @@ def address():
     markup.add(bt_monero, bt_eos)
     markup.add(bt_ripple, bt_btc)
     return markup
+
+def add_request(cid):
+    markup = telebot.types.InlineKeyboardMarkup()
+    text = base.get_text(cid, 'add_req')
+    btn = telebot.types.InlineKeyboardButton(text=text, callback_data='add request')
+    markup.row(btn)
+    return markup
+
+
