@@ -20,7 +20,7 @@ def llanguage(msg):
     base.create_user(msg.chat.id, msg.text)
     markup = telebot.types.ReplyKeyboardMarkup(True, True)
     markup.row("ok")
-    str = bot.send_message(msg.chat.id, "Подтвердить условия", reply_markup=markup)
+    str = bot.send_message(msg.chat.id, base.get_text(msg.chat.id,"confirm"), reply_markup=markup)
     bot.register_next_step_handler(str, welcome)
 
 
